@@ -3,7 +3,9 @@ ARG UBUNTU_VERSION="22.04"
 ARG DOCKER_VERSION="24.0.7"
 ARG KUBECTL_VERSION="1.28.2"
 ARG OC_CLI_VERSION="4.14.1"
-ARG HELM_VERSION="3.13.2"
+# Using Helm 3.10.1 as the latest Helm version has a null value override issue.
+# For additional details, refer to: https://github.com/helm/helm/issues/5184
+ARG HELM_VERSION="3.10.1"
 ARG TERRAFORM_VERSION="1.6.4"
 ARG ANSIBLE_CORE_VERSION="2.13.11"
 ARG ANSIBLE_VERSION="6.7.0"
@@ -200,6 +202,7 @@ RUN pip3 install \
     cryptography \
     hvac \
     jmespath \
+    kubernetes \
     netaddr \
     passlib \
     pbr \
@@ -216,6 +219,9 @@ RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
       ansible-lint==${ANSIBLE_LINT} \
       jinja2==${JINJA_VERSION}; \
     fi
+
+#install ansible collection
+RUN ansible-galaxy collection install kubernetes.core
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
