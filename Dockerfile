@@ -7,9 +7,9 @@ ARG OC_CLI_VERSION="4.14.1"
 # For additional details, refer to: https://github.com/helm/helm/issues/5184
 ARG HELM_VERSION="3.10.1"
 ARG TERRAFORM_VERSION="1.6.4"
-ARG ANSIBLE_CORE_VERSION="2.13.11"
-ARG ANSIBLE_VERSION="6.7.0"
-ARG ANSIBLE_LINT="6.19.0"
+ARG ANSIBLE_CORE_VERSION="2.15.6"
+ARG ANSIBLE_VERSION="8.6.1"
+ARG ANSIBLE_LINT="6.22.0"
 ARG JINJA_VERSION="3.1.2"
 ARG CRICTL_VERSION="1.28.0"
 ARG VELERO_VERSION="1.12.1"
@@ -202,6 +202,8 @@ RUN pip3 install \
     cryptography \
     hvac \
     jmespath \
+    openshift \
+    pyyaml \
     kubernetes \
     netaddr \
     passlib \
