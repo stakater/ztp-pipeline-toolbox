@@ -52,7 +52,7 @@ RUN mkdir -p /root/download/binaries
 #download oc-cli
 RUN if [[ ! -z ${OC_CLI_VERSION} ]] ; then \
       mkdir -p oc_cli && \
-      curl -SsL --retry 5 -o oc_cli.tar.gz https://mirror.openshift.com/pub/openshift-v4/$TARGETARCH/clients/ocp/stable/openshift-client-linux-$OC_CLI_VERSION.tar.gz && \
+      curl -SsL --retry 5 -o oc_cli.tar.gz https://mirror.openshift.com/pub/openshift-v4/$TARGETARCH/clients/ocp/$OC_CLI_VERSION/openshift-client-linux-$OC_CLI_VERSION.tar.gz && \
       tar xvf oc_cli.tar.gz -C oc_cli && \
       mv "/root/download/oc_cli/oc" "/root/download/binaries/oc"; \
     fi
