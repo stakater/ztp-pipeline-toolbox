@@ -14,6 +14,7 @@ ARG JINJA_VERSION="3.1.2"
 ARG CRICTL_VERSION="1.28.0"
 ARG VELERO_VERSION="1.12.1"
 ARG ZSH_VERSION="5.8.1"
+ARG VAULT_VERSION="1.15.2"
 
 ######################################################### BINARY-DOWNLOADER ############################################
 FROM alpine as binary_downloader
@@ -32,6 +33,7 @@ ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG STERN_VERSION
 ARG ZSH_VERSION
+ARG VAULT_VERSION
 
 USER root
 WORKDIR /root/download
@@ -40,6 +42,7 @@ RUN apk --update add \
     curl \
     openssl \
     unzip \
+    tar \
     wget
 
 WORKDIR /root/download
@@ -49,7 +52,7 @@ RUN mkdir -p /root/download/binaries
 #download oc-cli
 RUN if [[ ! -z ${OC_CLI_VERSION} ]] ; then \
       mkdir -p oc_cli && \
-      curl -SsL --retry 5 -o oc_cli.tar.gz https://mirror.openshift.com/pub/openshift-v4/$TARGETARCH/clients/ocp/stable/openshift-client-linux-$OC_CLI_VERSION.tar.gz && \
+      curl -SsL --retry 5 -o oc_cli.tar.gz https://mirror.openshift.com/pub/openshift-v4/$TARGETARCH/clients/ocp/$OC_CLI_VERSION/openshift-client-linux-$OC_CLI_VERSION.tar.gz && \
       tar xvf oc_cli.tar.gz -C oc_cli && \
       mv "/root/download/oc_cli/oc" "/root/download/binaries/oc"; \
     fi
@@ -112,6 +115,13 @@ RUN if [[ ! -z ${VELERO_VERSION} ]] ; then \
       mv velero-v${VELERO_VERSION}-linux-${TARGETARCH}/velero /root/download/binaries/velero; \
     fi
 
+#download vault CLI
+RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
+      wget -q https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_${TARGETARCH}.zip && \
+      unzip ./vault_${VAULT_VERSION}_linux_${TARGETARCH}.zip -d vault_cli && \
+      mv "/root/download/vault_cli/vault" "/root/download/binaries/vault"; \
+    fi
+
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -128,6 +138,7 @@ ARG JINJA_VERSION
 ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG ZSH_VERSION
+ARG VAULT_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -245,6 +256,7 @@ ARG JINJA_VERSION
 ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG ZSH_VERSION
+ARG VAULT_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
