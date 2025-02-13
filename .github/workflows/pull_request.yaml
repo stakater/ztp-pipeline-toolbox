@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    uses: stakater/.github/.github/workflows/pull_request_container_build.yaml@v0.0.97
+    uses: stakater/.github/.github/workflows/pull_request_container_build.yaml@v0.0.131
     with:
       DOCKER_FILE_PATH: Dockerfile
     secrets:
