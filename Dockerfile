@@ -238,6 +238,7 @@ RUN ansible-galaxy collection install kubernetes.core
 RUN ansible-galaxy collection install azure.azcollection
 
 RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
+RUN pip3 install azure-cli
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
