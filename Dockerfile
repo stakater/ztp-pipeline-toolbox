@@ -228,6 +228,14 @@ RUN pip3 install \
     azure-mgmt-network \
     azure-mgmt-resource \
     azure-storage-blob \
+    azure-mgmt-resource \
+    azure-mgmt-compute \
+    azure-mgmt-network \
+    azure-mgmt-authorization \
+    azure-mgmt-containerservice \
+    azure-mgmt-monitor \
+    azure-mgmt-automation \
+    azure-mgmt-keyvault \
     'ansible[azure]' \
     azure-cli
 
