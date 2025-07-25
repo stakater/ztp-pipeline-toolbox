@@ -222,13 +222,7 @@ RUN pip3 install \
     pip \
     pyOpenSSL \
     pyvmomi \
-    setuptools \
-    msrestazure \
-    azure-mgmt-compute \
-    azure-mgmt-network \
-    azure-mgmt-resource \
-    'ansible[azure]' \
-    azure-cli
+    setuptools
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
@@ -241,6 +235,10 @@ RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
 
 #install ansible collection
 RUN ansible-galaxy collection install kubernetes.core
+RUN ansible-galaxy collection install azure.azcollection --force
+
+RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
+RUN pip3 install azure-cli
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
