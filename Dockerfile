@@ -224,6 +224,7 @@ RUN pip3 install \
     pyvmomi \
     setuptools \
     ansible[azure] \
+    azure-azcollection \
     azure-cli
 
 #install ansible
