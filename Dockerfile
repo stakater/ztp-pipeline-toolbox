@@ -226,7 +226,8 @@ RUN pip3 install \
     msrestazure \
     azure-mgmt-compute \
     azure-mgmt-network \
-    azure-mgmt-resource
+    azure-mgmt-resource \
+    ansible[azure]
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
