@@ -227,6 +227,7 @@ RUN pip3 install \
     azure-mgmt-compute \
     azure-mgmt-network \
     azure-mgmt-resource \
+    azure-storage-blob \
     'ansible[azure]' \
     azure-cli
 
