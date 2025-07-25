@@ -222,7 +222,11 @@ RUN pip3 install \
     pip \
     pyOpenSSL \
     pyvmomi \
-    setuptools
+    setuptools \
+    msrestazure \
+    azure-mgmt-compute \
+    azure-mgmt-network \
+    azure-mgmt-resource
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
