@@ -236,6 +236,7 @@ RUN pip3 install \
     azure-mgmt-monitor \
     azure-mgmt-automation \
     azure-mgmt-keyvault \
+     azure-mgmt-recoveryservicesbackup \
     'ansible[azure]' \
     azure-cli
 
