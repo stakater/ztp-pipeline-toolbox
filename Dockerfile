@@ -225,7 +225,7 @@ RUN pip3 install \
     setuptools \
     azure-cli
 
-RUN pip3 install ansible[azure]
+RUN pip install ansible[azure]
 
 
 #install ansible
