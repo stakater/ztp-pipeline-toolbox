@@ -223,7 +223,6 @@ RUN pip3 install \
     pyOpenSSL \
     pyvmomi \
     setuptools \
-    azure-azcollection \
     azure-cli
 
 RUN pip3 install ansible[azure]
