@@ -239,6 +239,7 @@ RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
 
 #install ansible collection
 RUN ansible-galaxy collection install kubernetes.core
+RUN ansible-galaxy collection install azure.azcollection
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
