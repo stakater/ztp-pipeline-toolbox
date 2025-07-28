@@ -1,5 +1,5 @@
 ######################################################### TOOLCHAIN VERSIONING #########################################
-ARG UBUNTU_VERSION="24.04"
+ARG UBUNTU_VERSION="22.04"
 ARG DOCKER_VERSION="24.0.7"
 ARG KUBECTL_VERSION="1.28.2"
 ARG OC_CLI_VERSION="4.14.1"
@@ -238,7 +238,8 @@ RUN ansible-galaxy collection install kubernetes.core
 RUN ansible-galaxy collection install azure.azcollection --force
 
 RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
-RUN pip3 install azure-cli
+RUN pip3 install azure-cli \
+    azure-mgmt-recoveryservicesbackup-models
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
