@@ -223,7 +223,7 @@ RUN pip3 install \
     pyOpenSSL \
     pyvmomi \
     setuptools \
-    azure-mgmt-recoveryservicesbackup-models
+    azure-mgmt-recoveryservicesbackup
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
