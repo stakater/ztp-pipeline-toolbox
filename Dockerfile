@@ -239,7 +239,7 @@ RUN ansible-galaxy collection install azure.azcollection --force
 
 RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
 RUN pip3 install azure-cli
-RUN pip3 install azure-mgmt-recoveryservicesbackup==3.0.0 msgraph-core azure-identity
+RUN pip3 install azure-mgmt-recoveryservicesbackup==3.0.0 msgraph-core azure-identity azure-cli azure-mgmt-authorization
 RUN pip3 install \
     azure-graphrbac==0.61.1 \
     msrestazure==0.6.4 \
