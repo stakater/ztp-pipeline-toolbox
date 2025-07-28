@@ -211,9 +211,11 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-RUN apt-get update && \
-    apt-get install -y python3-pip python3-setuptools python3-venv && \
-    python3 -m pip install --upgrade pip setuptools
+RUN apt-get update --fix-missing && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates python3-pip python3-setuptools python3-venv && \
+    python3 -m pip install --upgrade pip setuptools && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install \
     cryptography \
