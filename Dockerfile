@@ -239,6 +239,7 @@ RUN ansible-galaxy collection install azure.azcollection --force
 
 RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
 RUN pip3 install azure-cli
+RUN pip3 install azure-mgmt-recoveryservicesbackup-models
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
