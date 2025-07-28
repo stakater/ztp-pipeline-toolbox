@@ -2,7 +2,7 @@
 ARG UBUNTU_VERSION="24.04"
 ARG DOCKER_VERSION="28.3.2"
 ARG KUBECTL_VERSION="1.28.2"
-ARG OC_CLI_VERSION="4.14.1"
+ARG OC_CLI_VERSION="4.17.0"
 # Using Helm 3.10.1 as the latest Helm version has a null value override issue.
 # For additional details, refer to: https://github.com/helm/helm/issues/5184
 ARG HELM_VERSION="3.10.1"
