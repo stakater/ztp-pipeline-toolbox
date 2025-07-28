@@ -211,13 +211,21 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-RUN apt-get update && apt-get install -y python3-pip python3-setuptools
 
-# 2. Perform a robust upgrade of pip and setuptools.
-RUN python3 -m pip install --upgrade --force-reinstall pip setuptools
+# 1. Install core Python packages via apt-get, but use a new approach
+# to install pip and setuptools from a known-good source.
+RUN apt-get update && apt-get install -y \
+    python3-distutils # Ensure distutils is present, needed for ensurepip
 
-# 3. Install your Python packages in logical groups.
-# (Continue with your original list, as this error was not related to it)
+# 2. Use the built-in `ensurepip` module to install a fresh version of pip.
+RUN python3 -m ensurepip --upgrade
+
+# 3. Now that we have a clean pip installation, we can upgrade it.
+# We no longer need the --force-reinstall flag here.
+RUN python3 -m pip install --upgrade pip setuptools
+
+# 4. Install your Python packages in logical groups.
+# (Continue with your original list)
 RUN pip3 install \
     cryptography \
     pyOpenSSL \
@@ -228,7 +236,7 @@ RUN pip3 install \
     pbr \
     jmespath
 
-# 4. Install the potentially conflicting packages last.
+# 5. Install the potentially conflicting packages last.
 RUN pip3 install \
     kubernetes \
     openshift
