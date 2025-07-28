@@ -177,7 +177,6 @@ RUN apt-get install -y \
 # Group B: Libraries and system tools
 RUN apt-get install -y \
     libssl-dev \
-    locales \
     lsb-release \
     nano \
     net-tools \
