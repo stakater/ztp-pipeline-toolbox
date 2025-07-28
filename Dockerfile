@@ -154,21 +154,34 @@ WORKDIR /root
 
 #https://github.com/waleedka/modern-deep-learning-docker/issues/4#issue-292539892
 #bc and tcptraceroute needed for tcping
-RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+RUN apt-get update -y
+
+# Step 2: Dist-upgrade (careful, this can pull many changes)
+RUN apt-get dist-upgrade -y
+
+# Step 3: Upgrade
+RUN apt-get upgrade -y
+
+# Step 4: Install essential core packages first (small group)
+RUN apt-get install -y \
     apt-utils \
-    apt-transport-https \
-    bash-completion \
-    bc \
     build-essential \
     ca-certificates \
     curl \
-    dnsutils \
-    fping \
     git \
     gnupg \
+    python3 \
+    python3-dev \
+    python3-pip \
+    sudo
+
+# Step 5: Install a second group of packages
+RUN apt-get install -y \
+    apt-transport-https \
+    bash-completion \
+    bc \
+    dnsutils \
+    fping \
     gnupg2 \
     groff \
     iputils-ping \
@@ -182,11 +195,7 @@ RUN apt-get update && \
     netcat \
     nmap \
     openssl \
-    python3 \
-    python3-dev \
-    python3-pip \
     software-properties-common \
-    sudo \
     telnet \
     tcptraceroute \
     traceroute \
@@ -195,8 +204,10 @@ RUN apt-get update && \
     vim \
     wget \
     zip \
-    zlib1g-dev &&\
-    apt-get clean -y && \
+    zlib1g-dev
+
+# Step 6: Cleanup (only after all installs are confirmed working)
+RUN apt-get clean -y && \
     apt-get autoclean -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
