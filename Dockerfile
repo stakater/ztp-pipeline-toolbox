@@ -213,19 +213,43 @@ RUN git config --global --add safe.directory '*'
 
 RUN python3 -V
 
-RUN apt install python3-pip
+RUN apt-get update -y && \
+    apt-get install -y \
+    build-essential \
+    python3-dev \
+    libffi-dev \
+    libssl-dev \
+    python3-venv \
+    python3-pip \
+    python3-setuptools
+
+# Step 2: Upgrade pip and setuptools.
+# Add the --break-system-packages flag to override the system restriction.
+RUN python3 -m pip install --upgrade --break-system-packages pip setuptools
+
+# Step 3: Install your Python packages in logical groups.
+# Add the --break-system-packages flag to each pip install command.
+RUN python3 -m pip install --break-system-packages \
+    cryptography \
+    pyOpenSSL \
+    pyyaml \
+    hvac \
+    netaddr \
+    passlib \
+    pbr \
+    jmespath
 
 RUN pip --version
 
-# Step 4: Install your Python packages in logical groups.
-RUN python3 -m pip install pyOpenSSL
-RUN python3 -m pip install cryptography
-RUN python3 -m pip install pyyaml
-RUN python3 -m pip install hvac
-RUN python3 -m pip install netaddr
-RUN python3 -m pip install passlib
-RUN python3 -m pip install pbr
-RUN python3 -m pip install jmespath
+# # Step 4: Install your Python packages in logical groups.
+# RUN python3 -m pip install pyOpenSSL
+# RUN python3 -m pip install cryptography
+# RUN python3 -m pip install pyyaml
+# RUN python3 -m pip install hvac
+# RUN python3 -m pip install netaddr
+# RUN python3 -m pip install passlib
+# RUN python3 -m pip install pbr
+# RUN python3 -m pip install jmespath
 
 # Step 5: Install the potentially conflicting packages last.
 RUN python3 -m pip install \
