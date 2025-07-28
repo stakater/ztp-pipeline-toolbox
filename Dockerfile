@@ -235,7 +235,7 @@ RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
       pip install --break-system-packages \
       ansible-core==${ANSIBLE_CORE_VERSION} \
       ansible==${ANSIBLE_VERSION} \
-      ansible-lint==${ANSIBLE_LINT} \
+      ansible-lint \
       jinja2==${JINJA_VERSION}; \
     fi
 
