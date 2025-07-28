@@ -213,15 +213,6 @@ RUN git config --global --add safe.directory '*'
 
 RUN apt-get install python3-pip
 
-# Step 2: Configure pip to allow package installation.
-# This creates a configuration file that bypasses the "externally-managed" error.
-RUN mkdir -p /root/.config/pip && \
-    echo "[global]" > /root/.config/pip/pip.conf && \
-    echo "break-system-packages = true" >> /root/.config/pip/pip.conf
-
-# Step 3: Upgrade pip and setuptools, which should now work.
-RUN python3 -m pip install --upgrade pip setuptools
-
 # Step 4: Install your Python packages in logical groups.
 RUN python3 -m pip install \
     cryptography \
