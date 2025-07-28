@@ -1,5 +1,5 @@
 ######################################################### TOOLCHAIN VERSIONING #########################################
-ARG UBUNTU_VERSION="24.04"
+ARG UBUNTU_VERSION="22.04"
 ARG DOCKER_VERSION="28.3.2"
 ARG KUBECTL_VERSION="1.28.2"
 ARG OC_CLI_VERSION="4.17.0"
