@@ -211,23 +211,11 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-# Step 1: Install core apt packages.
-RUN apt-get update && apt-get install -y python3-venv curl
+RUN apt-get update && apt-get install -y python3-venv python3.12-pip python3-setuptools
 
-# Step 2: Download get-pip.py.
-RUN curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-
-# Step 3: Run the get-pip.py script.
-RUN python3 get-pip.py
-
-# Step 4: Upgrade pip and setuptools.
 RUN python3 -m pip install --upgrade pip setuptools
 
-# Step 5: Clean up the script.
-RUN rm get-pip.py
-
-# Install your Python packages in logical groups.
-# This part of your Dockerfile remains the same.
+# 3. Install your Python packages in logical groups.
 RUN pip3 install \
     cryptography \
     pyOpenSSL \
@@ -238,7 +226,7 @@ RUN pip3 install \
     pbr \
     jmespath
 
-# Install the potentially conflicting packages last.
+# 4. Install the potentially conflicting packages last.
 RUN pip3 install \
     kubernetes \
     openshift
