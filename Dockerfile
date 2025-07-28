@@ -212,17 +212,20 @@ RUN apt-get update && \
 RUN git config --global --add safe.directory '*'
 
 RUN apt-get update -y --fix-missing && \
-    apt-get clean && \
+    apt-get install -y python3-venv python3-pip python3-setuptools && \
     rm -rf /var/lib/apt/lists/*
 
-# Step 2: Install core Python packages from apt.
-# This is a separate step to isolate any potential install failures.
-RUN apt-get update && apt-get install -y python3-venv python3-pip python3-setuptools
+# Step 2: Configure pip to allow package installation.
+# This creates a configuration file that bypasses the "externally-managed" error.
+RUN mkdir -p /root/.config/pip && \
+    echo "[global]" > /root/.config/pip/pip.conf && \
+    echo "break-system-packages = true" >> /root/.config/pip/pip.conf
 
+# Step 3: Upgrade pip and setuptools, which should now work.
 RUN python3 -m pip install --upgrade pip setuptools
 
 # Step 4: Install your Python packages in logical groups.
-RUN pip3 install \
+RUN python3 -m pip install \
     cryptography \
     pyOpenSSL \
     pyyaml \
@@ -233,7 +236,7 @@ RUN pip3 install \
     jmespath
 
 # Step 5: Install the potentially conflicting packages last.
-RUN pip3 install \
+RUN python3 -m pip install \
     kubernetes \
     openshift
 
