@@ -154,8 +154,10 @@ WORKDIR /root
 
 #https://github.com/waleedka/modern-deep-learning-docker/issues/4#issue-292539892
 #bc and tcptraceroute needed for tcping
-RUN apt-get update -y --fix-missing && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get upgrade -y && \
+    apt-get install -y \
     apt-utils \
     apt-transport-https \
     bash-completion \
@@ -172,7 +174,6 @@ RUN apt-get update -y --fix-missing && \
     iputils-ping \
     jq \
     less \
-    libffi-dev \
     libssl-dev \
     locales \
     lsb-release \
@@ -181,9 +182,9 @@ RUN apt-get update -y --fix-missing && \
     netcat-traditional \
     nmap \
     openssl \
+    python3 \
     python3-dev \
-    python3-setuptools \
-    python3-venv \
+    python3-pip \
     software-properties-common \
     sudo \
     telnet \
@@ -194,7 +195,10 @@ RUN apt-get update -y --fix-missing && \
     vim \
     wget \
     zip \
-    zlib1g-dev && \
+    zlib1g-dev &&\
+    apt-get clean -y && \
+    apt-get autoclean -y && \
+    apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
@@ -209,17 +213,9 @@ RUN git config --global --add safe.directory '*'
 
 RUN python3 -V
 
-RUN curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python3 get-pip.py && \
-    rm get-pip.py
-
-# Step 3: Upgrade pip and setuptools using the newly installed pip.
-# The --break-system-packages flag is used as a safety measure.
-RUN python3 -m pip install --upgrade --break-system-packages pip setuptools
-
-# Step 4: Install all Python dependencies.
-# The --break-system-packages flag is required due to Ubuntu's new policy.
-RUN pip3 install --break-system-packages \
+RUN pip --version
+#install common requirements
+RUN pip3 install \
     cryptography \
     hvac \
     jmespath \
@@ -229,10 +225,12 @@ RUN pip3 install --break-system-packages \
     netaddr \
     passlib \
     pbr \
+    pip \
     pyOpenSSL \
-    pyvmomi
+    pyvmomi \
+    setuptools
 
-RUN pip --version
+
 
 # # Step 4: Install your Python packages in logical groups.
 # RUN python3 -m pip install pyOpenSSL
