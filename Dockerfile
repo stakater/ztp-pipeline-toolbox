@@ -211,7 +211,11 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-RUN apt-get install python3-pip
+RUN python3 -V
+
+RUN apt install python3-pip
+
+RUN pip --version
 
 # Step 4: Install your Python packages in logical groups.
 RUN python3 -m pip install pyOpenSSL
