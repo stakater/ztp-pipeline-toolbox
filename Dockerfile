@@ -214,8 +214,8 @@ RUN git config --global --add safe.directory '*'
 RUN apt-get install python3-pip
 
 # Step 4: Install your Python packages in logical groups.
-RUN python3 -m pip install cryptography
 RUN python3 -m pip install pyOpenSSL
+RUN python3 -m pip install cryptography
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install hvac
 RUN python3 -m pip install netaddr
