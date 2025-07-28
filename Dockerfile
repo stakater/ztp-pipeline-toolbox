@@ -154,46 +154,39 @@ WORKDIR /root
 
 #https://github.com/waleedka/modern-deep-learning-docker/issues/4#issue-292539892
 #bc and tcptraceroute needed for tcping
-RUN apt-get update -y
-
-# Step 2: Dist-upgrade (careful, this can pull many changes)
-RUN apt-get dist-upgrade -y
-
-# Step 3: Upgrade
-RUN apt-get upgrade -y
-# Group A: Networking and text utilities
-RUN apt-get install -y \
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+    apt-utils \
     apt-transport-https \
     bash-completion \
     bc \
+    build-essential \
+    ca-certificates \
+    curl \
     dnsutils \
     fping \
+    git \
+    gnupg \
     gnupg2 \
     groff \
     iputils-ping \
     jq \
-    less
-
-# Group B: Libraries and system tools
-RUN apt-get install -y \
+    less \
     libssl-dev \
+    locales \
     lsb-release \
-    nano
-
-RUN apt-get install -y net-tools
-
-# Install netcat
-RUN apt-get install -y netcat
-
-# Install nmap
-RUN apt-get install -y nmap
-
-# Install openssl
-RUN apt-get install -y openssl
-
-# Group C: More system tools and utilities
-RUN apt-get install -y \
+    nano \
+    net-tools \
+    netcat-traditional \
+    nmap \
+    openssl \
+    python3 \
+    python3-dev \
+    python3-pip \
     software-properties-common \
+    sudo \
     telnet \
     tcptraceroute \
     traceroute \
@@ -202,10 +195,8 @@ RUN apt-get install -y \
     vim \
     wget \
     zip \
-    zlib1g-dev
-
-# Step 6: Cleanup (only after all installs are confirmed working)
-RUN apt-get clean -y && \
+    zlib1g-dev && \
+    apt-get clean -y && \
     apt-get autoclean -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
