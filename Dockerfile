@@ -232,11 +232,10 @@ RUN pip install --break-system-packages \
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
-      pip install \
-      ansible-core==${ANSIBLE_CORE_VERSION} \
-      ansible==${ANSIBLE_VERSION} \
-      ansible-lint==${ANSIBLE_LINT} \
-      jinja2==${JINJA_VERSION}; \
+      pip3 install ansible-core==${ANSIBLE_CORE_VERSION};
+      pip3 install ansible==${ANSIBLE_VERSION};
+      pip3 install ansible-lint==${ANSIBLE_LINT};
+      pip3 install jinja2==${JINJA_VERSION};
     fi
 
 #install ansible collection
