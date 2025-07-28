@@ -211,10 +211,13 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-RUN python3 -m pip install --upgrade pip setuptools
+RUN apt-get update && apt-get install -y python3-pip python3-setuptools
 
-# Third, install the Python packages in logical groups.
-# This makes it easier to find dependency conflicts.
+# 2. Perform a robust upgrade of pip and setuptools.
+RUN python3 -m pip install --upgrade --force-reinstall pip setuptools
+
+# 3. Install your Python packages in logical groups.
+# (Continue with your original list, as this error was not related to it)
 RUN pip3 install \
     cryptography \
     pyOpenSSL \
@@ -225,7 +228,7 @@ RUN pip3 install \
     pbr \
     jmespath
 
-# Finally, install the potentially conflicting packages last.
+# 4. Install the potentially conflicting packages last.
 RUN pip3 install \
     kubernetes \
     openshift
