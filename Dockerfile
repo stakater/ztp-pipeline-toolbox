@@ -6,7 +6,7 @@ ARG OC_CLI_VERSION="4.17.0"
 # Helm 3.10.1 is quite old. The null value override issue (helm/helm#5184)
 # was for Helm 3.0.0. Later 3.x versions fixed this.
 ARG HELM_VERSION="3.15.0"
-ARG TERRAFORM_VERSION="1.7.9" # Updated to a recent stable 1.x version (as of current date)
+ARG TERRAFORM_VERSION="1.6.4"
 
 ARG PYTHON_DEFAULT_VERSION="3.12"
 ARG ANSIBLE_CORE_VERSION="2.18.7"
