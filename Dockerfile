@@ -232,7 +232,7 @@ RUN pip install --break-system-packages \
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
-      pip3 install \
+      pip install \
       ansible-core==${ANSIBLE_CORE_VERSION} \
       ansible==${ANSIBLE_VERSION} \
       ansible-lint==${ANSIBLE_LINT} \
@@ -243,8 +243,8 @@ RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
 RUN ansible-galaxy collection install kubernetes.core
 RUN ansible-galaxy collection install azure.azcollection --force
 
-RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
-RUN pip3 install azure-cli
+RUN pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
+RUN pip install azure-cli
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
