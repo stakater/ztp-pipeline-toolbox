@@ -214,15 +214,14 @@ RUN git config --global --add safe.directory '*'
 RUN apt-get install python3-pip
 
 # Step 4: Install your Python packages in logical groups.
-RUN python3 -m pip install \
-    cryptography \
-    pyOpenSSL \
-    pyyaml \
-    hvac \
-    netaddr \
-    passlib \
-    pbr \
-    jmespath
+RUN python3 -m pip install cryptography
+RUN python3 -m pip install pyOpenSSL
+RUN python3 -m pip install pyyaml
+RUN python3 -m pip install hvac
+RUN python3 -m pip install netaddr
+RUN python3 -m pip install passlib
+RUN python3 -m pip install pbr
+RUN python3 -m pip install jmespath
 
 # Step 5: Install the potentially conflicting packages last.
 RUN python3 -m pip install \
