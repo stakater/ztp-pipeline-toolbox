@@ -161,21 +161,7 @@ RUN apt-get dist-upgrade -y
 
 # Step 3: Upgrade
 RUN apt-get upgrade -y
-
-# Step 4: Install essential core packages first (small group)
-RUN apt-get install -y \
-    apt-utils \
-    build-essential \
-    ca-certificates \
-    curl \
-    git \
-    gnupg \
-    python3 \
-    python3-dev \
-    python3-pip \
-    sudo
-
-# Step 5: Install a second group of packages
+# Group A: Networking and text utilities
 RUN apt-get install -y \
     apt-transport-https \
     bash-completion \
@@ -186,7 +172,10 @@ RUN apt-get install -y \
     groff \
     iputils-ping \
     jq \
-    less \
+    less
+
+# Group B: Libraries and system tools
+RUN apt-get install -y \
     libssl-dev \
     locales \
     lsb-release \
@@ -194,7 +183,10 @@ RUN apt-get install -y \
     net-tools \
     netcat \
     nmap \
-    openssl \
+    openssl
+
+# Group C: More system tools and utilities
+RUN apt-get install -y \
     software-properties-common \
     telnet \
     tcptraceroute \
