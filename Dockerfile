@@ -211,11 +211,20 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-RUN apt-get update && apt-get install -y python3-venv curl && \
-    curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
-    python3 get-pip.py && \
-    rm get-pip.py && \
-    python3 -m pip install --upgrade pip setuptools
+# Step 1: Install core apt packages.
+RUN apt-get update && apt-get install -y python3-venv curl
+
+# Step 2: Download get-pip.py.
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+
+# Step 3: Run the get-pip.py script.
+RUN python3 get-pip.py
+
+# Step 4: Upgrade pip and setuptools.
+RUN python3 -m pip install --upgrade pip setuptools
+
+# Step 5: Clean up the script.
+RUN rm get-pip.py
 
 # Install your Python packages in logical groups.
 # This part of your Dockerfile remains the same.
