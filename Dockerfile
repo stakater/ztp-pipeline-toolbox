@@ -211,21 +211,24 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-#install common requirements
+RUN python3 -m pip install --upgrade pip setuptools
+
+# Third, install the Python packages in logical groups.
+# This makes it easier to find dependency conflicts.
 RUN pip3 install \
     cryptography \
-    hvac \
-    jmespath \
-    openshift \
+    pyOpenSSL \
     pyyaml \
-    kubernetes \
+    hvac \
     netaddr \
     passlib \
     pbr \
-    pip \
-    pyOpenSSL \
-    pyvmomi \
-    setuptools
+    jmespath
+
+# Finally, install the potentially conflicting packages last.
+RUN pip3 install \
+    kubernetes \
+    openshift
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
