@@ -1,20 +1,23 @@
 ######################################################### TOOLCHAIN VERSIONING #########################################
 ARG UBUNTU_VERSION="24.04"
-ARG DOCKER_VERSION="24.0.7"
-ARG KUBECTL_VERSION="1.28.2"
-ARG OC_CLI_VERSION="4.14.1"
-# Using Helm 3.10.1 as the latest Helm version has a null value override issue.
-# For additional details, refer to: https://github.com/helm/helm/issues/5184
-ARG HELM_VERSION="3.10.1"
+ARG DOCKER_VERSION="28.3.2"
+ARG KUBECTL_VERSION="1.30.2"
+ARG OC_CLI_VERSION="4.17.0"
+# Helm 3.10.1 is quite old. The null value override issue (helm/helm#5184)
+# was for Helm 3.0.0. Later 3.x versions fixed this.
+ARG HELM_VERSION="3.15.0"
 ARG TERRAFORM_VERSION="1.6.4"
-ARG ANSIBLE_CORE_VERSION="2.15.6"
-ARG ANSIBLE_VERSION="8.6.1"
-ARG ANSIBLE_LINT="6.22.0"
-ARG JINJA_VERSION="3.1.2"
-ARG CRICTL_VERSION="1.28.0"
-ARG VELERO_VERSION="1.12.1"
-ARG ZSH_VERSION="5.8.1"
-ARG VAULT_VERSION="1.15.2"
+
+ARG PYTHON_DEFAULT_VERSION="3.12"
+ARG ANSIBLE_CORE_VERSION="2.18.7"
+ARG ANSIBLE_VERSION="11.8.0"
+ARG ANSIBLE_LINT="7.2.0"
+ARG JINJA_VERSION="3.1.6"
+
+ARG CRICTL_VERSION="1.30.0"
+ARG VELERO_VERSION="1.13.0"
+ARG ZSH_VERSION="5.9"
+ARG VAULT_VERSION="1.17.0
 
 ######################################################### BINARY-DOWNLOADER ############################################
 FROM alpine as binary_downloader
@@ -176,7 +179,7 @@ RUN apt-get update && \
     lsb-release \
     nano \
     net-tools \
-    netcat \
+    netcat-traditional \
     nmap \
     openssl \
     python3 \
@@ -208,8 +211,11 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
+RUN python3 -V
+
+RUN pip --version
 #install common requirements
-RUN pip3 install \
+RUN pip install --break-system-packages \
     cryptography \
     hvac \
     jmespath \
@@ -226,10 +232,10 @@ RUN pip3 install \
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
-      pip3 install \
+      pip install --break-system-packages \
       ansible-core==${ANSIBLE_CORE_VERSION} \
       ansible==${ANSIBLE_VERSION} \
-      ansible-lint==${ANSIBLE_LINT} \
+      ansible-lint \
       jinja2==${JINJA_VERSION}; \
     fi
 
@@ -237,8 +243,8 @@ RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
 RUN ansible-galaxy collection install kubernetes.core
 RUN ansible-galaxy collection install azure.azcollection --force
 
-RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
-RUN pip3 install azure-cli
+RUN pip install --break-system-packages -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
+RUN pip install --break-system-packages azure-cli
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
