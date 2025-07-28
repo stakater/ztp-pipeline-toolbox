@@ -211,9 +211,7 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
-RUN apt-get update -y --fix-missing && \
-    apt-get install -y python3-venv python3-pip python3-setuptools && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get install python3-pip
 
 # Step 2: Configure pip to allow package installation.
 # This creates a configuration file that bypasses the "externally-managed" error.
