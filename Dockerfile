@@ -230,23 +230,6 @@ RUN pip install --break-system-packages \
     pyvmomi \
     setuptools
 
-
-
-# # Step 4: Install your Python packages in logical groups.
-# RUN python3 -m pip install pyOpenSSL
-# RUN python3 -m pip install cryptography
-# RUN python3 -m pip install pyyaml
-# RUN python3 -m pip install hvac
-# RUN python3 -m pip install netaddr
-# RUN python3 -m pip install passlib
-# RUN python3 -m pip install pbr
-# RUN python3 -m pip install jmespath
-
-# Step 5: Install the potentially conflicting packages last.
-RUN python3 -m pip install \
-    kubernetes \
-    openshift
-
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
       pip3 install \
