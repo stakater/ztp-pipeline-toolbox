@@ -180,11 +180,16 @@ RUN apt-get install -y \
     lsb-release \
     nano
 
-RUN apt-get install -y \
-    net-tools \
-    netcat \
-    nmap \
-    openssl
+RUN apt-get install -y net-tools
+
+# Install netcat
+RUN apt-get install -y netcat
+
+# Install nmap
+RUN apt-get install -y nmap
+
+# Install openssl
+RUN apt-get install -y openssl
 
 # Group C: More system tools and utilities
 RUN apt-get install -y \
