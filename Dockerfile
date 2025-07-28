@@ -154,10 +154,8 @@ WORKDIR /root
 
 #https://github.com/waleedka/modern-deep-learning-docker/issues/4#issue-292539892
 #bc and tcptraceroute needed for tcping
-RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+RUN apt-get update -y --fix-missing && \
+    apt-get install -y --no-install-recommends \
     apt-utils \
     apt-transport-https \
     bash-completion \
@@ -174,6 +172,7 @@ RUN apt-get update && \
     iputils-ping \
     jq \
     less \
+    libffi-dev \
     libssl-dev \
     locales \
     lsb-release \
@@ -182,9 +181,9 @@ RUN apt-get update && \
     netcat-traditional \
     nmap \
     openssl \
-    python3 \
     python3-dev \
-    python3-pip \
+    python3-setuptools \
+    python3-venv \
     software-properties-common \
     sudo \
     telnet \
@@ -196,9 +195,6 @@ RUN apt-get update && \
     wget \
     zip \
     zlib1g-dev && \
-    apt-get clean -y && \
-    apt-get autoclean -y && \
-    apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt/archives/*
 
@@ -213,31 +209,28 @@ RUN git config --global --add safe.directory '*'
 
 RUN python3 -V
 
-RUN apt-get update -y && \
-    apt-get install -y \
-    build-essential \
-    python3-dev \
-    libffi-dev \
-    libssl-dev \
-    python3-venv \
-    python3-pip \
-    python3-setuptools
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
+    python3 get-pip.py && \
+    rm get-pip.py
 
-# Step 2: Upgrade pip and setuptools.
-# Add the --break-system-packages flag to override the system restriction.
+# Step 3: Upgrade pip and setuptools using the newly installed pip.
+# The --break-system-packages flag is used as a safety measure.
 RUN python3 -m pip install --upgrade --break-system-packages pip setuptools
 
-# Step 3: Install your Python packages in logical groups.
-# Add the --break-system-packages flag to each pip install command.
-RUN python3 -m pip install --break-system-packages \
+# Step 4: Install all Python dependencies.
+# The --break-system-packages flag is required due to Ubuntu's new policy.
+RUN pip3 install --break-system-packages \
     cryptography \
-    pyOpenSSL \
-    pyyaml \
     hvac \
+    jmespath \
+    openshift \
+    pyyaml \
+    kubernetes \
     netaddr \
     passlib \
     pbr \
-    jmespath
+    pyOpenSSL \
+    pyvmomi
 
 RUN pip --version
 
