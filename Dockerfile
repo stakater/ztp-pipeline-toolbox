@@ -222,7 +222,8 @@ RUN pip3 install \
     pip \
     pyOpenSSL \
     pyvmomi \
-    setuptools
+    setuptools \
+    azure-mgmt-recoveryservicesbackup-models
 
 #install ansible
 RUN if [[ ! -z ${ANSIBLE_VERSION} && ! -z ${JINJA_VERSION} ]] ; then \
@@ -238,8 +239,7 @@ RUN ansible-galaxy collection install kubernetes.core
 RUN ansible-galaxy collection install azure.azcollection --force
 
 RUN pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt -v
-RUN pip3 install azure-cli \
-    azure-mgmt-recoveryservicesbackup-models
+RUN pip3 install azure-cli
 
 ENV TERM xterm
 ENV ZSH_THEME agnoster
