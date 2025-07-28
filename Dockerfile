@@ -211,22 +211,10 @@ RUN apt-get update && \
     zsh
 RUN git config --global --add safe.directory '*'
 
+RUN apt-get update && \
+    apt-get install -y python3-pip python3-setuptools python3-venv && \
+    python3 -m pip install --upgrade pip setuptools
 
-# 1. Install core Python packages via apt-get, but use a new approach
-# to install pip and setuptools from a known-good source.
-
-# 1. Update apt-get and ensure core Python is present.
-# We no longer install python3-distutils as it's included in python3.
-RUN apt-get update && apt-get install -y python3-pip python3-setuptools
-
-# 2. Use the built-in `ensurepip` module to get a clean pip installation.
-# This should now work without the distutils install step.
-RUN python3 -m ensurepip --upgrade
-
-# 3. Now that we have a clean pip installation, we can upgrade it.
-RUN python3 -m pip install --upgrade pip setuptools
-
-# 4. Install your Python packages in logical groups.
 RUN pip3 install \
     cryptography \
     pyOpenSSL \
