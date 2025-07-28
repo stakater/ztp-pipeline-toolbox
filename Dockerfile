@@ -178,7 +178,9 @@ RUN apt-get install -y \
 RUN apt-get install -y \
     libssl-dev \
     lsb-release \
-    nano \
+    nano
+
+RUN apt-get install -y \
     net-tools \
     netcat \
     nmap \
