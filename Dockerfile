@@ -17,7 +17,8 @@ ARG JINJA_VERSION="3.1.6"
 ARG CRICTL_VERSION="1.30.0"
 ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
-ARG VAULT_VERSION="1.17.0
+ARG VAULT_VERSION="1.17.0"
+ARG KSP_VERSION="1.8.0"
 
 ######################################################### BINARY-DOWNLOADER ############################################
 FROM alpine as binary_downloader
@@ -37,6 +38,7 @@ ARG VELERO_VERSION
 ARG STERN_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
+ARG KSP_VERSION
 
 USER root
 WORKDIR /root/download
@@ -125,6 +127,12 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
       mv "/root/download/vault_cli/vault" "/root/download/binaries/vault"; \
     fi
 
+#download KSP CLI
+RUN if [[ ! -z ${KSP_VERSION} ]] ; then \
+      wget -q https://github.com/stakater-ab/kubestackplus-cli/releases/download/v${KSP_VERSION}/ksp-linux-${TARGETARCH} -O /root/download/ksp && \
+      mv "/root/download/ksp" "/root/download/binaries/ksp"; \
+    fi
+
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -142,6 +150,7 @@ ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
+ARG KSP_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -267,6 +276,7 @@ ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
+ARG KSP_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -299,6 +309,9 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "VELERO_VERSION" ]] ; then \
       velero version --client-only; \
+    fi; \
+    if [[ ! -z "KSP_VERSION" ]] ; then \
+      ksp version; \
     fi
 
 COPY .bashrc /root/.bashrc
