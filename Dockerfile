@@ -129,8 +129,16 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 
 #download KSP CLI
 RUN if [[ ! -z ${KSP_VERSION} ]] ; then \
-      wget -q https://github.com/stakater-ab/kubestackplus-cli/releases/download/v${KSP_VERSION}/ksp-linux-${TARGETARCH} -O /root/download/ksp && \
-      mv "/root/download/ksp" "/root/download/binaries/ksp"; \
+      if [ "${TARGETARCH}" = "amd64" ]; then \
+        ARCH="x86_64"; \
+      elif [ "${TARGETARCH}" = "arm64" ]; then \
+        ARCH="aarch64"; \
+      else \
+        ARCH="${TARGETARCH}"; \
+      fi && \
+      wget -q https://github.com/stakater-ab/kubestackplus-cli/releases/download/v${KSP_VERSION}/ksp_linux_${ARCH}.tar.gz && \
+      tar -xzf ksp_linux_${ARCH}.tar.gz && \
+      mv ksp_linux_${ARCH}/bin/linux_${TARGETARCH}/ksp /root/download/binaries/ksp; \
     fi
 
 ######################################################### BASE-IMAGE ###################################################
