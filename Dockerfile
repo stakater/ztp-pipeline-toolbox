@@ -138,7 +138,8 @@ RUN if [[ ! -z ${KSP_VERSION} ]] ; then \
       fi && \
       wget -q https://github.com/stakater-ab/kubestackplus-cli/releases/download/v${KSP_VERSION}/ksp_linux_${ARCH}.tar.gz && \
       tar -xzf ksp_linux_${ARCH}.tar.gz && \
-      mv ksp_linux_${ARCH}/bin/linux_${TARGETARCH}/ksp /root/download/binaries/ksp; \
+      mv ksp_linux_${ARCH}/bin/linux_${TARGETARCH}/ksp /root/download/binaries/ksp && \
+      rm -rf ksp_linux_${ARCH}.tar.gz ksp_linux_${ARCH}; \
     fi
 
 ######################################################### BASE-IMAGE ###################################################
