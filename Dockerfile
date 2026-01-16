@@ -225,7 +225,6 @@ RUN python3 -V
 RUN pip --version
 #install common requirements
 RUN pip install --break-system-packages \
-    cryptography \
     hvac \
     jmespath \
     openshift \
