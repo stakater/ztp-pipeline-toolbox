@@ -18,7 +18,10 @@ ARG CRICTL_VERSION="1.30.0"
 ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
-ARG KSP_VERSION="1.8.0"
+ARG KSP_VERSION="pr-2-dd2ede1"
+
+######################################################### KSP-CLI ######################################################
+FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
 
 ######################################################### BINARY-DOWNLOADER ############################################
 FROM alpine as binary_downloader
@@ -127,20 +130,8 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
       mv "/root/download/vault_cli/vault" "/root/download/binaries/vault"; \
     fi
 
-#download KSP CLI
-RUN if [[ ! -z ${KSP_VERSION} ]] ; then \
-      if [ "${TARGETARCH}" = "amd64" ]; then \
-        ARCH="x86_64"; \
-      elif [ "${TARGETARCH}" = "arm64" ]; then \
-        ARCH="aarch64"; \
-      else \
-        ARCH="${TARGETARCH}"; \
-      fi && \
-      wget -q https://github.com/stakater-ab/kubestackplus-cli/releases/download/v${KSP_VERSION}/ksp_linux_${ARCH}.tar.gz && \
-      tar -xzf ksp_linux_${ARCH}.tar.gz && \
-      mv ksp_linux_${ARCH}/bin/linux_${TARGETARCH}/ksp /root/download/binaries/ksp && \
-      rm -rf ksp_linux_${ARCH}.tar.gz ksp_linux_${ARCH}; \
-    fi
+#download KSP CLI from GHCR
+COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
