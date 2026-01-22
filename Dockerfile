@@ -138,7 +138,7 @@ COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 #download crossplane CLI
 RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
       RUN curl -fsSL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh \
-          | sh -s -- -b /usr/local/bin ${CROSSPLANE_VERSION}
+          | sh -s -- -b /usr/local/bin ${CROSSPLANE_VERSION} \
     fi
 
 ######################################################### BASE-IMAGE ###################################################
