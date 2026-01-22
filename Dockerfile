@@ -322,10 +322,7 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "KSP_VERSION" ]] ; then \
       ksp version; \
-    fi; \
-    if [[ ! -z "CROSSPLANE_VERSION" ]] ; then \
-      crossplane version; \
-    fi 
+    fi;
 
 COPY .bashrc /root/.bashrc
 COPY .zshrc /root/.zshrc
