@@ -20,8 +20,6 @@ ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
 ARG KSP_VERSION="pr-2-dd2ede1"
 ARG CROSSPLANE_VERSION="1.18.2"
-ARG CROSSPLANE_CHANNEL="stable"
-ARG TARGETARCH
 
 ######################################################### KSP-CLI ######################################################
 FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
@@ -136,7 +134,6 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 
 #download KSP CLI from GHCR
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
-
 
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
