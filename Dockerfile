@@ -137,18 +137,6 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 #download KSP CLI from GHCR
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
-#download crossplane
-RUN if [ -n "${CROSSPLANE_VERSION}" ]; then \
-      OS_ARCH=""; \
-      case "$(uname -m)" in \
-        x86_64|amd64) OS_ARCH="linux_amd64";; \
-        aarch64|arm64) OS_ARCH="linux_arm64";; \
-        *) echo "Unsupported architecture"; exit 1;; \
-      esac; \
-      curl -fsSL "https://releases.crossplane.io/stable/${CROSSPLANE_VERSION}/bin/${OS_ARCH}/crank" -o /root/download/binaries/crossplane && \
-      chmod +x /root/download/binaries/crossplane; \
-    fi
-
 
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
@@ -330,10 +318,7 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "KSP_VERSION" ]] ; then \
       ksp version; \
-    fi; \
-    if [[ ! -z "${CROSSPLANE_VERSION}" ]]; then \
-      crossplane version; \
-    fi
+    fi; 
 
 COPY .bashrc /root/.bashrc
 COPY .zshrc /root/.zshrc
