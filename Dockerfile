@@ -141,8 +141,6 @@ RUN if [ -n "${CROSSPLANE_VERSION}" ]; then \
       | sh -s -- -b /root/download/binaries "${CROSSPLANE_VERSION}"; \
     fi
 
-COPY --from=binary_downloader /root/download/binaries/* /usr/local/bin/
-
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -324,7 +322,7 @@ RUN chmod -R +x /usr/local/bin && \
     if [[ ! -z "KSP_VERSION" ]] ; then \
       ksp version; \
     fi; \
-    if [[ -n "${CROSSPLANE_VERSION}" ]]; then \
+    if [[ ! -z "${CROSSPLANE_VERSION}" ]]; then \
       crossplane version; \
     fi
 
