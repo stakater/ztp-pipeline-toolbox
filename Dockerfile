@@ -137,8 +137,8 @@ COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
 #download crossplane CLI
 RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
-      wget -q "https://releases.crossplane.io/stable/v${CROSSPLANE_VERSION}/bin/linux_${TARGETARCH}/crank" -O /root/download/crank && \
-      mv "/root/download/crank" "/root/download/binaries/crank"; \
+      RUN curl -fsSL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh \
+          | sh -s -- -b /usr/local/bin ${CROSSPLANE_VERSION}
     fi
 
 ######################################################### BASE-IMAGE ###################################################
