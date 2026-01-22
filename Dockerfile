@@ -19,7 +19,9 @@ ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
 ARG KSP_VERSION="pr-2-dd2ede1"
-ARG CROSSPLANE_VERSION="1.18.1"
+ARG CROSSPLANE_VERSION="1.18.2"
+ARG CROSSPLANE_CHANNEL="stable"
+ARG TARGETARCH
 
 ######################################################### KSP-CLI ######################################################
 FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
@@ -143,6 +145,17 @@ RUN if [ -n "${CROSSPLANE_VERSION}" ]; then \
       chmod +x /root/download/binaries/crossplane; \
     fi
 
+# download crossplane CLI inside Docker
+RUN set -eux; \
+    ARCH="${TARGETARCH:-amd64}"; \
+    case "$ARCH" in \
+        amd64) BINARCH="linux_amd64";; \
+        arm64) BINARCH="linux_arm64";; \
+        *) echo "Unsupported arch $ARCH" && exit 1;; \
+    esac; \
+    URL="https://releases.crossplane.io/${CROSSPLANE_CHANNEL}/${CROSSPLANE_VERSION}/bin/${BINARCH}/crank"; \
+    curl -fsSL "$URL" -o /root/download/binaries/crossplane; \
+    chmod +x /root/download/binaries/crossplane
 
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
