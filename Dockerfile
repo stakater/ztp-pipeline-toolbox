@@ -136,10 +136,14 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
 #download crossplane CLI
-RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
-      RUN curl -fsSL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh \
-          | sh -s -- -b /usr/local/bin ${CROSSPLANE_VERSION} \
+RUN if [ -n "${CROSSPLANE_VERSION}" ]; then \
+      curl -fsSL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh \
+      | sh -s -- -b /usr/local/bin "${CROSSPLANE_VERSION}"; \
+    else \
+      curl -fsSL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh \
+      | sh -s -- -b /usr/local/bin; \
     fi
+
 
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
@@ -323,7 +327,7 @@ RUN chmod -R +x /usr/local/bin && \
       ksp version; \
     fi; \
     if [[ ! -z "CROSSPLANE_VERSION" ]] ; then \
-      crank --version; \
+      crossplane version; \
     fi
 
 COPY .bashrc /root/.bashrc
