@@ -19,7 +19,7 @@ ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
 ARG KSP_VERSION="pr-2-dd2ede1"
-ARG CROSSPLANE_VERSION="1.18.2"
+ARG CROSSPLANE_VERSION="2.1.3"
 
 ######################################################### KSP-CLI ######################################################
 FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
