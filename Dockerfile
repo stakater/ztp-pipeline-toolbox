@@ -19,6 +19,7 @@ ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
 ARG KSP_VERSION="pr-2-dd2ede1"
+ARG CROSSPLANE_VERSION="1.18.1"
 
 ######################################################### KSP-CLI ######################################################
 FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
@@ -42,6 +43,7 @@ ARG STERN_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
 ARG KSP_VERSION
+ARG CROSSPLANE_VERSION
 
 USER root
 WORKDIR /root/download
@@ -133,6 +135,12 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 #download KSP CLI from GHCR
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
+#download crossplane CLI
+RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
+      wget -q "https://releases.crossplane.io/stable/v${CROSSPLANE_VERSION}/bin/linux_${TARGETARCH}/crank" -O /root/download/crank && \
+      mv "/root/download/crank" "/root/download/binaries/crank"; \
+    fi
+
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -151,6 +159,7 @@ ARG VELERO_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
 ARG KSP_VERSION
+ARG CROSSPLANE_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -276,6 +285,7 @@ ARG VELERO_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
 ARG KSP_VERSION
+ARG CROSSPLANE_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -311,6 +321,9 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "KSP_VERSION" ]] ; then \
       ksp version; \
+    fi; \
+    if [[ ! -z "CROSSPLANE_VERSION" ]] ; then \
+      crank version; \
     fi
 
 COPY .bashrc /root/.bashrc
