@@ -135,6 +135,13 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 #download KSP CLI from GHCR
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
+#download crossplane CLI
+RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
+      wget -q "https://releases.crossplane.io/stable/v${CROSSPLANE_VERSION}/bin/linux_${TARGETARCH}/crank" -O /root/download/crank && \
+      mv "/root/download/crank" "/root/download/binaries/crank" && \
+      ln -s /root/download/binaries/crank /root/download/binaries/crossplane; \
+    fi
+
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -315,7 +322,10 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "KSP_VERSION" ]] ; then \
       ksp version; \
-    fi; 
+    fi; \
+    if [[ ! -z "CROSSPLANE_VERSION" ]] ; then \
+      crossplane version; \
+    fi 
 
 COPY .bashrc /root/.bashrc
 COPY .zshrc /root/.zshrc
