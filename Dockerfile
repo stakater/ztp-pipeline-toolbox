@@ -135,10 +135,12 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 #download KSP CLI from GHCR
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
-# download crossplane CLI
+# download standalone crossplane CLI
 RUN if [ -n "${CROSSPLANE_VERSION}" ]; then \
-      curl -fsSL https://raw.githubusercontent.com/crossplane/crossplane/master/install.sh \
-      | sh -s -- -b /root/download/binaries "${CROSSPLANE_VERSION}"; \
+      curl -fsSL \
+        https://github.com/crossplane/crossplane/releases/download/v${CROSSPLANE_VERSION}/crossplane-linux-${TARGETARCH} \
+        -o /root/download/binaries/crossplane && \
+      chmod +x /root/download/binaries/crossplane; \
     fi
 
 ######################################################### BASE-IMAGE ###################################################
