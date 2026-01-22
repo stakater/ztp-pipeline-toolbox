@@ -323,7 +323,7 @@ RUN chmod -R +x /usr/local/bin && \
       ksp version; \
     fi; \
     if [[ ! -z "CROSSPLANE_VERSION" ]] ; then \
-      crank version; \
+      crank --version; \
     fi
 
 COPY .bashrc /root/.bashrc
