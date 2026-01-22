@@ -137,25 +137,18 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
 #download KSP CLI from GHCR
 COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
 
-# download Crossplane CLI 
+#download crossplane
 RUN if [ -n "${CROSSPLANE_VERSION}" ]; then \
-      curl -fsSL \
-        https://github.com/crossplane/crossplane-cli/releases/download/v${CROSSPLANE_VERSION}/crossplane-linux-${TARGETARCH} \
-        -o /root/download/binaries/crossplane && \
+      OS_ARCH=""; \
+      case "$(uname -m)" in \
+        x86_64|amd64) OS_ARCH="linux_amd64";; \
+        aarch64|arm64) OS_ARCH="linux_arm64";; \
+        *) echo "Unsupported architecture"; exit 1;; \
+      esac; \
+      curl -fsSL "https://releases.crossplane.io/stable/${CROSSPLANE_VERSION}/bin/${OS_ARCH}/crank" -o /root/download/binaries/crossplane && \
       chmod +x /root/download/binaries/crossplane; \
     fi
 
-# download crossplane CLI inside Docker
-RUN set -eux; \
-    ARCH="${TARGETARCH:-amd64}"; \
-    case "$ARCH" in \
-        amd64) BINARCH="linux_amd64";; \
-        arm64) BINARCH="linux_arm64";; \
-        *) echo "Unsupported arch $ARCH" && exit 1;; \
-    esac; \
-    URL="https://releases.crossplane.io/${CROSSPLANE_CHANNEL}/${CROSSPLANE_VERSION}/bin/${BINARCH}/crank"; \
-    curl -fsSL "$URL" -o /root/download/binaries/crossplane; \
-    chmod +x /root/download/binaries/crossplane
 
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
