@@ -20,7 +20,6 @@ ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
 ARG KSP_VERSION="pr-2-dd2ede1"
 ARG CROSSPLANE_VERSION="2.1.3"
-ARG PODMAN_VERSION="5.3.1"
 
 ######################################################### KSP-CLI ######################################################
 FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
@@ -45,7 +44,6 @@ ARG ZSH_VERSION
 ARG VAULT_VERSION
 ARG KSP_VERSION
 ARG CROSSPLANE_VERSION
-ARG PODMAN_VERSION
 
 USER root
 WORKDIR /root/download
@@ -144,20 +142,6 @@ RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
       ln -s /root/download/binaries/crank /root/download/binaries/crossplane; \
     fi
 
-#download podman
-RUN if [[ ! -z ${PODMAN_VERSION} ]] ; then \
-      mkdir -p /root/download/podman/bin && \
-      set -eux && \
-      arch="$(uname -m)" && \
-      wget -q -O podman.tar.gz "https://github.com/containers/podman/releases/download/v${PODMAN_VERSION}/podman-remote-static-linux_${TARGETARCH}.tar.gz" && \
-      tar --extract \
-          --file podman.tar.gz \
-          --strip-components 2 \
-          --directory /root/download/podman/bin && \
-      mv /root/download/podman/bin/podman-remote-static /root/download/binaries/podman && \
-      chmod +x /root/download/binaries/podman; \
-    fi
-
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -177,7 +161,6 @@ ARG ZSH_VERSION
 ARG VAULT_VERSION
 ARG KSP_VERSION
 ARG CROSSPLANE_VERSION
-ARG PODMAN_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -304,7 +287,6 @@ ARG ZSH_VERSION
 ARG VAULT_VERSION
 ARG KSP_VERSION
 ARG CROSSPLANE_VERSION
-ARG PODMAN_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -319,9 +301,6 @@ RUN chmod -R +x /usr/local/bin && \
     docker --version && \
     yq --version && \
     tcpping; \
-    if [[ ! -z "PODMAN_VERSION" ]] ; then \
-      podman --version; \
-    fi; \
     if [[ ! -z "HELM_VERSION" ]] ; then \
       helm version && \
       helm repo update; \
@@ -343,10 +322,7 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "KSP_VERSION" ]] ; then \
       ksp version; \
-    fi; \
-    if [[ ! -z "CROSSPLANE_VERSION" ]] ; then \
-      crossplane version; \
-    fi
+    fi;
 
 COPY .bashrc /root/.bashrc
 COPY .zshrc /root/.zshrc
