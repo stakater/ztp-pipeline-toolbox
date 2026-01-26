@@ -17,7 +17,12 @@ ARG JINJA_VERSION="3.1.6"
 ARG CRICTL_VERSION="1.30.0"
 ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
-ARG VAULT_VERSION="1.17.0
+ARG VAULT_VERSION="1.17.0"
+ARG KSP_VERSION="v1.8.0"
+ARG CROSSPLANE_VERSION="2.1.3"
+
+######################################################### KSP-CLI ######################################################
+FROM ghcr.io/stakater/kubestackplus-cli:${KSP_VERSION} as ksp_cli
 
 ######################################################### BINARY-DOWNLOADER ############################################
 FROM alpine as binary_downloader
@@ -37,6 +42,8 @@ ARG VELERO_VERSION
 ARG STERN_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
+ARG KSP_VERSION
+ARG CROSSPLANE_VERSION
 
 USER root
 WORKDIR /root/download
@@ -125,6 +132,16 @@ RUN if [[ ! -z ${VAULT_VERSION} ]] ; then \
       mv "/root/download/vault_cli/vault" "/root/download/binaries/vault"; \
     fi
 
+#download KSP CLI from GHCR
+COPY --from=ksp_cli /usr/local/bin/ksp /root/download/binaries/ksp
+
+#download crossplane CLI
+RUN if [[ ! -z ${CROSSPLANE_VERSION} ]] ; then \
+      wget -q "https://releases.crossplane.io/stable/v${CROSSPLANE_VERSION}/bin/linux_${TARGETARCH}/crank" -O /root/download/crank && \
+      mv "/root/download/crank" "/root/download/binaries/crank" && \
+      ln -s /root/download/binaries/crank /root/download/binaries/crossplane; \
+    fi
+
 ######################################################### BASE-IMAGE ###################################################
 FROM ubuntu:$UBUNTU_VERSION as base-image
 
@@ -142,6 +159,8 @@ ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
+ARG KSP_VERSION
+ARG CROSSPLANE_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -215,8 +234,7 @@ RUN python3 -V
 
 RUN pip --version
 #install common requirements
-RUN pip install --break-system-packages \
-    cryptography \
+RUN pip install --break-system-packages --ignore-installed cryptography \
     hvac \
     jmespath \
     openshift \
@@ -267,6 +285,8 @@ ARG CRICTL_VERSION
 ARG VELERO_VERSION
 ARG ZSH_VERSION
 ARG VAULT_VERSION
+ARG KSP_VERSION
+ARG CROSSPLANE_VERSION
 
 #use bash during docker build
 SHELL ["/bin/bash", "-c"]
@@ -299,7 +319,10 @@ RUN chmod -R +x /usr/local/bin && \
     fi; \
     if [[ ! -z "VELERO_VERSION" ]] ; then \
       velero version --client-only; \
-    fi
+    fi; \
+    if [[ ! -z "KSP_VERSION" ]] ; then \
+      ksp version; \
+    fi;
 
 COPY .bashrc /root/.bashrc
 COPY .zshrc /root/.zshrc
