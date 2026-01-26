@@ -18,7 +18,7 @@ ARG CRICTL_VERSION="1.30.0"
 ARG VELERO_VERSION="1.13.0"
 ARG ZSH_VERSION="5.9"
 ARG VAULT_VERSION="1.17.0"
-ARG KSP_VERSION="1.8.0"
+ARG KSP_VERSION="v1.8.0"
 ARG CROSSPLANE_VERSION="2.1.3"
 
 ######################################################### KSP-CLI ######################################################
